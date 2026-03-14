@@ -26,3 +26,8 @@ This project predicts house prices using a machine learning model trained on the
 ---
 
 **Developed March 2026**
+
+
+python -m venv venv
+.\venv\Scripts\activate
+pip install -r app/requirements.txt
