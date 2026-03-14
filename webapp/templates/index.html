@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>House Price Prediction</title>
+    <style>
+        body {
+            background: linear-gradient(120deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Segoe UI', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 700px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 4px 24px rgba(79,139,249,0.08);
+            padding: 2.5em 2em 2em 2em;
+        }
+        h1 {
+            text-align: center;
+            color: #235390;
+            margin-bottom: 0.5em;
+        }
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5em;
+        }
+        .form-group {
+            flex: 1 1 200px;
+            min-width: 200px;
+            margin-bottom: 1em;
+        }
+        label {
+            font-weight: 500;
+            margin-bottom: 0.3em;
+            display: block;
+        }
+        input, select {
+            width: 100%;
+            padding: 0.5em;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 1em;
+        }
+        button {
+            width: 100%;
+            background: linear-gradient(90deg,#4F8BF9 0%,#235390 100%);
+            color: #fff;
+            font-size: 1.2em;
+            font-weight: bold;
+            padding: 0.7em 0;
+            border: none;
+            border-radius: 8px;
+            margin-top: 1em;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        button:hover {
+            background: #235390;
+        }
+        .result {
+            margin-top: 2em;
+            text-align: center;
+            font-size: 1.3em;
+            color: #1a7f37;
+            background: #e6f4ea;
+            border-radius: 8px;
+            padding: 1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏡 House Price Prediction</h1>
+        <form id="predictForm">
+            <div class="form-group">
+                <label>Area (sqft)</label>
+                <input type="number" name="Area" value="2500" required>
+            </div>
+            <div class="form-group">
+                <label>Bedrooms</label>
+                <input type="number" name="Bedrooms" value="3" required>
+            </div>
+            <div class="form-group">
+                <label>Bathrooms</label>
+                <input type="number" name="Bathrooms" value="2" required>
+            </div>
+            <div class="form-group">
+                <label>Floors</label>
+                <input type="number" name="Floors" value="2" required>
+            </div>
+            <div class="form-group">
+                <label>Year Built</label>
+                <input type="number" name="YearBuilt" value="2005" required>
+            </div>
+            <div class="form-group">
+                <label>Location</label>
+                <select name="Location">
+                    <option>Downtown</option>
+                    <option>Suburban</option>
+                    <option>Urban</option>
+                    <option>Rural</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Condition</label>
+                <select name="Condition">
+                    <option>Excellent</option>
+                    <option>Good</option>
+                    <option>Fair</option>
+                    <option>Poor</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Garage</label>
+                <select name="Garage">
+                    <option>Yes</option>
+                    <option>No</option>
+                </select>
+            </div>
+            <button type="submit">🔮 Predict Price</button>
+        </form>
+        <div id="result" class="result" style="display:none;"></div>
+    </div>
+    <script>
+        document.getElementById('predictForm').onsubmit = async function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const data = {};
+            formData.forEach((v, k) => data[k] = v);
+            const res = await fetch('/predict', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            });
+            const out = await res.json();
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('result').innerHTML = `Estimated House Price: <b>$${out.prediction}</b>`;
+        };
+    </script>
+</body>
+</html>
